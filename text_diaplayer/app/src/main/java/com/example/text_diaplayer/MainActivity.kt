@@ -72,17 +72,20 @@ class MainActivity : ComponentActivity() {
             var colorNumber by rememberSaveable() { mutableStateOf(0) }
 
             var alignIconList = listOf(R.drawable.outline_align_horizontal_left_24,R.drawable.outline_align_horizontal_center_24,R.drawable.outline_align_horizontal_right_24)
-            var moveIconList = listOf(R.drawable.outline_play_arrow_24,R.drawable.outline_stop_24)
+            var moveIconList = listOf(R.drawable.outline_play_arrow_24,R.drawable.outline_arrow_back_2_24,R.drawable.outline_stop_24)
             var alignList = listOf(TextAlign.Left, TextAlign.Center, TextAlign.Right)
             var colorList = listOf(Color.Gray, Color.Red, Color.Yellow, Color.Blue, Color.Green, Color.White, Color.Black)
 
             LaunchedEffect(Unit) {
                 while (true){
                     delay(10)
-                    if (moveNumber == 1){
-                        offsetX += 3f
-                        if (offsetX > width / 2 + textSize * displayText.length / 2){
+                    if (moveNumber != 0){
+                        offsetX += if (moveNumber == 1) 3f else -3f
+                        if (offsetX > width / 2 + textSize * displayText.length / 2 + 1){
                             offsetX = -width / 2f - textSize * displayText.length / 2
+                        }
+                        if (offsetX < -width / 2 - textSize * displayText.length / 2 - 1){
+                            offsetX = width / 2f + textSize * displayText.length / 2
                         }
                     }
                 }
@@ -112,6 +115,7 @@ class MainActivity : ComponentActivity() {
                                 Row(
                                     Modifier.fillMaxWidth(),
                                 ) {
+                                    Spacer(Modifier.width(20.dp))
                                     Box(
                                         modifier = Modifier
                                             .size(50.dp)
@@ -162,8 +166,8 @@ class MainActivity : ComponentActivity() {
                                                 shape = CircleShape
                                             )
                                             .clickable(){
-                                                if (moveNumber == 0){
-                                                    moveNumber = 1
+                                                if (moveNumber < 2){
+                                                    moveNumber += 1
                                                     alignmentNumber = 1
                                                 }else {
                                                     moveNumber = 0
@@ -222,6 +226,7 @@ class MainActivity : ComponentActivity() {
                                 Row(
                                     Modifier.fillMaxWidth(),
                                 ) {
+                                    Spacer(Modifier.width(20.dp))
                                     Box(
                                         modifier = Modifier
                                             .size(50.dp)
@@ -272,8 +277,8 @@ class MainActivity : ComponentActivity() {
                                                 shape = CircleShape
                                             )
                                             .clickable(){
-                                                if (moveNumber == 0){
-                                                    moveNumber = 1
+                                                if (moveNumber < 2){
+                                                    moveNumber += 1
                                                     alignmentNumber = 1
                                                 }else {
                                                     moveNumber = 0
