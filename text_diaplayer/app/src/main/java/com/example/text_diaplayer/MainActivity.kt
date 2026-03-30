@@ -57,19 +57,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var fieldText by rememberSaveable() { mutableStateOf("") }
-            var displayText by rememberSaveable() { mutableStateOf("輸入文字") }
-            var textSize by rememberSaveable() { mutableStateOf(40f) }
-            var alignmentNumber by remember { mutableStateOf(0) }
             var localConfig = LocalConfiguration.current
             var width = localConfig.screenWidthDp
             var height = localConfig.screenHeightDp
-            var displayStyle by remember { mutableStateOf(false) }
+
+            var fieldText by rememberSaveable() { mutableStateOf("") }
+            var displayText by rememberSaveable() { mutableStateOf("輸入文字") }
+            var textSize by rememberSaveable() { mutableStateOf(40f) }
+            var displayStyle by rememberSaveable() { mutableStateOf(false) }
+            var offsetX by rememberSaveable() { mutableStateOf(0f) }
+
+            var alignmentNumber by remember { mutableStateOf(0) }
+            var moveNumber by rememberSaveable() { mutableStateOf(0) }
+            var colorNumber by rememberSaveable() { mutableStateOf(0) }
+
             var alignIconList = listOf(R.drawable.outline_align_horizontal_left_24,R.drawable.outline_align_horizontal_center_24,R.drawable.outline_align_horizontal_right_24)
             var moveIconList = listOf(R.drawable.outline_play_arrow_24,R.drawable.outline_stop_24)
             var alignList = listOf(TextAlign.Left, TextAlign.Center, TextAlign.Right)
-            var moveNumber by remember { mutableStateOf(0) }
-            var offsetX by remember { mutableStateOf(0f) }
+            var colorList = listOf(Color.Gray, Color.Red, Color.Yellow, Color.Blue, Color.Green, Color.White, Color.Black)
 
             LaunchedEffect(Unit) {
                 while (true){
@@ -173,6 +178,32 @@ class MainActivity : ComponentActivity() {
                                             modifier = Modifier.size(36.dp)
                                         )
                                     }
+                                    Spacer(Modifier.width(20.dp))
+                                    Box(
+                                        modifier = Modifier
+                                            .size(50.dp)
+                                            .background(
+                                                color = Color(0xFFFFFFFF),
+                                                shape = CircleShape
+                                            )
+                                            .clickable(){
+                                                if (colorNumber < 6){
+                                                    colorNumber += 1
+                                                } else {
+                                                    colorNumber = 0
+                                                }
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                                .background(
+                                                    color = colorList[colorNumber],
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                    }
                                 }
                                 Spacer(
                                     Modifier.height(20.dp)
@@ -258,10 +289,35 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                     Spacer(Modifier.width(20.dp))
+                                    Box(
+                                        modifier = Modifier
+                                            .size(50.dp)
+                                            .background(
+                                                color = Color(0xFFFFFFFF),
+                                                shape = CircleShape
+                                            )
+                                            .clickable(){
+                                                if (colorNumber < 6){
+                                                    colorNumber += 1
+                                                } else {
+                                                    colorNumber = 0
+                                                }
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                                .background(
+                                                    color = colorList[colorNumber],
+                                                    shape = CircleShape
+                                                )
+                                        )
+                                    }
+                                    Spacer(Modifier.width(20.dp))
                                     Box (
                                         Modifier.weight(1f)
                                     ) {
-
                                         Slider(
                                             onValueChange = {
                                                 textSize = it
@@ -289,6 +345,7 @@ class MainActivity : ComponentActivity() {
                                 fontSize = textSize.sp,
                                 lineHeight = (textSize + 10).sp,
                                 textAlign = alignList[alignmentNumber],
+                                color = colorList[colorNumber]
                             )
                         }
                     }
